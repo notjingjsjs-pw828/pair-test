@@ -1,0 +1,22 @@
+// upload.js
+
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
+
+async function upload(fileStream, fileName) {
+    const form = new FormData();
+    form.append('file', fileStream, fileName);
+
+    const response = await axios.post('http://dashboard.apis-nothing.xyz/api/upload', form, {
+        headers: form.getHeaders()
+    });
+
+    if (response.data?.url) {
+        return response.data.url; // لینک نهایی آپلود
+    } else {
+        throw new Error("Upload failed: " + JSON.stringify(response.data));
+    }
+}
+
+module.exports = { upload };
